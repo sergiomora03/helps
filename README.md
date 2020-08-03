@@ -2,7 +2,7 @@
 
 Este repositorio se crea con el fin de copilar diferentes ayudas para código en R.
 
-### Read
+## Read table in R
 
 hola profe Carlos Ariel, realice puede ver como solucioné la lectura del archivo en el link de "Solución"
 
@@ -15,6 +15,6 @@ hola profe Carlos Ariel, realice puede ver como solucioné la lectura del archiv
 |Notebook|[profe_carlos.Rmd](https://github.com/sergiomora03/helps/blob/master/profe_carlos.Rmd)|
 |RPubs|[Link](https://rpubs.com/sergiomora123/CarlosAriel)|
 
-### Author
+# Author
 
 Created by: [Sergio Alberto Mora Pardo](https://github.com/sergiomora03)
