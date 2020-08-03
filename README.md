@@ -1,4 +1,8 @@
-### helps
+# Helps
+
+Este repositorio se crea con el fin de copilar diferentes ayudas para código en R.
+
+### Read
 
 hola profe Carlos Ariel, realice puede ver como solucioné la lectura del archivo en el link de "Solución"
 
