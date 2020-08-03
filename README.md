@@ -1,4 +1,8 @@
-# helps
+### helps
+
+hola profe Carlos Ariel, realice puede ver como solucioné la lectura del archivo en el link de "Solución"
+
+### Content 
 
 |Name file|document|
 |---------|--------|
@@ -7,3 +11,6 @@
 |Notebook|[profe_carlos.Rmd](https://github.com/sergiomora03/helps/blob/master/profe_carlos.Rmd)|
 |RPubs|[Link](https://rpubs.com/sergiomora123/CarlosAriel)|
 
+### Author
+
+Created by: [Sergio Alberto Mora Pardo](https://github.com/sergiomora03)
