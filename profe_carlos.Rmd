@@ -1,0 +1,100 @@
+---
+title: "archivo profe Carlos Ariel"
+output: html_notebook
+---
+
+Profe, esta fue la solución para leer los archivos. No sé si la intención sea leer usando la función `read.delim()` por que la forma de los datos no permite por default leer la base de datos. Es necesario complementarla con algo más. En mi caso use la libreria `tidyr` que hace parte de `tidyverse`.
+
+La solución que implemente, fue la siguiente:
+
+```{r}
+# Mostrando las primeras 6 filas.
+read.delim("jan17Weather.csv") %>% tidyr::separate("date.PRCP.SNOW.TMAX.TMIN", c("date", "PRCP", "SNOW", "TMAX", "TMIN"), sep = "\t") %>% mutate(date = as.Date(date)) %>% mutate_if(is.character, as.numeric) %>% head()
+```
+
+Esto de acuerdo a, que al leer el archivo nos va a retornar un dataframe con solo una columna. De esta forma:
+
+```{r}
+# Not run
+read.delim("jan17Weather.csv")
+```
+
+
+```{r}
+read.delim("jan17Weather.csv") %>% head()
+```
+
+Al sacar los nombres del data frame, evidenciamos que únicamente tenemos una columna.
+
+
+```{r}
+read.delim("jan17Weather.csv") %>% names()
+```
+
+
+Donde, la primera y última columna tienen un `"`. Esto puede ser contra intuitivo y sucede porque los datos del archivo *.csv* tienen la siguiente estructura [Anotación uno](AnotacionUno.png) con unas `"` al inicio y al final entendiendo la estructura de datos como si fuese una sola columna de tipo string.
+
+O si aplicamos el atributo `quote` de la función `read.delim()` nos retornara la siguiente tabla, la cual supongo es la que usted tiene:
+
+```{r}
+# Not run
+read.delim("jan17Weather.csv", quote = "")
+```
+
+
+```{r}
+read.delim("jan17Weather.csv", quote = "") %>% head()
+```
+
+Resultando esta forma de lectura contra intuitiva, porque puede tender a pensarse que por tener `"` el atributo `quote` de la función `read.delim()` leería los valores sin problemas, pero este atributo únicamente funciona cuando *cada una* de las columnas esta rodeada de `"` al inicio y al final.
+
+Para solucionar esto, existen algunas alternativas. Podemos, reemplazar directamente el archivo *.csv* quitandole las `"` y después volviendo a leer el archivo, esto lo solucionaría. [Anotación dos](Anotaciondos.png). 
+
+```{r}
+# Not tun
+read.delim("jan17Weather - ejemplo.csv")
+```
+
+
+```{r}
+read.delim("jan17Weather - ejemplo.csv") %>% head()
+```
+
+_La base de datos "jan17Weather - ejemplo.csv" contiene la modificación quitando las `"` del archivo original como muestra la Anotación dos._
+
+sin embargo, hacer esto puede ser complejo si estamos conectados a una base de datos o si el archivo o base de datos contiene un alto nivel de datos o si no se quiere modificar la base de datos inicial. Puede usarse la combinación de los siguientes comandos, los cuales use para leer el archivo *.csv*, Donde:
+
+```{r}
+# Not run
+read.delim("jan17Weather.csv") %>% tidyr::separate("date.PRCP.SNOW.TMAX.TMIN", c("date", "PRCP", "SNOW", "TMAX", "TMIN"), sep = "\t")
+```
+
+
+```{r}
+read.delim("jan17Weather.csv") %>% tidyr::separate("date.PRCP.SNOW.TMAX.TMIN", c("date", "PRCP", "SNOW", "TMAX", "TMIN"), sep = "\t") %>% head()
+```
+
+Uniendo el método `read.delim()` en un pipeline `%>%` con la función `separate()` de la librearía `tidyr`, acá la [documentación](https://tidyr.tidyverse.org/reference/separate.html). Separando una columna con multiples columnas, es decir, separaremos la columna que nos lee `read.delim("jan17Weather.csv")` indicandole:
+
+1. El nombre de la columna actual: `"date.PRCP.SNOW.TMAX.TMIN"`
+2. Un vector con los nombres de la columna a dividir: `c("date", "PRCP", "SNOW", "TMAX", "TMIN")`
+3. La expresión regular o REGEX, que separará la columna en cada una de las columnas: `SEP = " \t"`
+
+Después de separa los valores en columna, vemos que `R` aún tiene los valores de columnas como caracteres, por lo tanto, implementamos un `mutate()` para modificar el tipo de los vectores dentro del data frame. De la siguiente manera:
+
+```{r}
+read.delim("jan17Weather.csv") %>% tidyr::separate("date.PRCP.SNOW.TMAX.TMIN", c("date", "PRCP", "SNOW", "TMAX", "TMIN"), sep = "\t") %>% mutate(date = as.Date(date)) %>% mutate_if(is.character, as.numeric) %>% head()
+```
+
+
+Donde, dentro del mismo pipeline indicamos: `mutate(date = as.Date(date))` para modificar la columna `date` a tipo `<date>` y luego con el comando: `mutate_if(is.character, as.numeric)` indicamos que nos modifique todas las columnas que sean tipo caracter, en este caso las columnas faltantes `PRCP`, `SNOW`, `TMAX`, `TMIN` y que las transforme a tipo `<dbl>`. Es decir:
+
+0. Todas las columans son caracteres.
+1. El comando: `mutate(date = as.Date(date))` modifica las columna `date` a tipo fecha.
+2. El comando: `mutate_if()` necesita una condición, en nuestro caso es `is.character()` metodo que devuelve valores booleanos. Y necesita un metodo para modificar los valores que cumplan la condición, en nuestro caso `as.numeric()` método que transforma valores a numeros (incluidos tipo `double` o `<dbl>`).
+
+_Es necesario denotar que los argumentos ingresados a `mutate_if` son métodos sin párentesis._
+
+¡Saludos profe!
+
+att: [Sergio Mora Pardo](https://github.com/sergiomora03)
